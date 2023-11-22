@@ -19,12 +19,14 @@ air_df = air_df.fillna(0)
 weather_df = pd.read_csv(StringIO(weather_data))
 weather_df = weather_df.fillna(0) 
 
-data_dir = '/data'
-if not os.path.exists(data_dir):
-    os.makedirs(data_dir)
+# Define the root directory
+root_dir = os.path.abspath('.')
 
-# Set database path 
+# Define the paths for the data directory and database file
+data_dir = os.path.join(root_dir, 'data')
 db_path = os.path.join(data_dir, 'my_database.db')
+
+
 
 conn = sqlite3.connect(db_path)
 air_df.to_sql('air_table', conn, if_exists='replace', index=False)
