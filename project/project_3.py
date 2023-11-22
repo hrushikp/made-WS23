@@ -16,13 +16,15 @@ weather_data = weather_response.text
 air_df = pd.read_csv(StringIO(air_data))
 air_df = air_df.fillna(0) 
 
+
 weather_df = pd.read_csv(StringIO(weather_data))
 weather_df = weather_df.fillna(0) 
 
-# Define the root directory
+
+
 root_dir = os.path.abspath('.')
 
-# Define the paths for the data directory and database file
+
 data_dir = os.path.join(root_dir, 'data')
 db_path = os.path.join(data_dir, 'my_database.db')
 
@@ -33,4 +35,20 @@ air_df.to_sql('air_table', conn, if_exists='replace', index=False)
 weather_df.to_sql('weather_table', conn, if_exists='replace', index=False)
 conn.close()
 
-print("Data pipeline complete!")
+conn = sqlite3.connect(db_path)
+cursor = conn.cursor()
+
+
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+table_names = cursor.fetchall()
+table_names = [name[0] for name in table_names]
+
+
+print("Tables (datasets) in the database:")
+for table_name in table_names:
+    print(table_name)
+
+
+conn.close()
+
+print("Data pipeline complete! and dataets are succesfully stored in tyhe database")
